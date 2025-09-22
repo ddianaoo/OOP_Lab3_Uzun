@@ -35,7 +35,31 @@ while (true)
                 break;
             }
 
-            Book newBook = CreateBookFromConsole();
+            Console.WriteLine("Оберіть варіант створення книги:");
+            Console.WriteLine("1 - Короткий ввід (назва, автор, жанр)");
+            Console.WriteLine("2 - Повний ввід (усі поля)");
+            Console.Write("Ваш вибір: ");
+            string inputMode = Console.ReadLine();
+
+            Book newBook;
+
+            if (inputMode == "1")
+            {
+                Console.WriteLine("Використано конструктор з 3 параметрами (title, author, genre).");
+                newBook = CreateBookFromConsole(false);
+            }
+            else if (inputMode == "2")
+            {
+                Console.WriteLine("Використано конструктор з повним набором параметрів.");
+                newBook = CreateBookFromConsole();
+            }
+            else
+            {
+                Console.WriteLine("Використано конструктор без параметрів.");
+                newBook = new Book();
+            }
+
+
             books.Add(newBook);
             Console.WriteLine("Книгу успішно додано!");
             break;
@@ -124,13 +148,56 @@ while (true)
                         Console.Write("Неправильний номер. Введіть ще раз: ");
                     }
                     var bookToCompare = books[indexBook3 - 1];
-                    int result = bookToModify.CompareTo(bookToCompare);
-                    if (result < 0)
-                        Console.WriteLine($"{bookToModify.Title} вийшла раніше за {bookToCompare.Title}");
-                    else if (result > 0)
-                        Console.WriteLine($"{bookToModify.Title} вийшла пізніше за {bookToCompare.Title}");
-                    else
-                        Console.WriteLine($"{bookToModify.Title} та {bookToCompare.Title} вийшли в один день");
+
+                    Console.WriteLine("Порівняти за:");
+                    Console.WriteLine("1 - Датою створення");
+                    Console.WriteLine("2 - Кількістю у наявності");
+                    Console.WriteLine("3 - Ціною");
+                    Console.Write("Виберіть опцію: ");
+                    string action3 = Console.ReadLine();
+
+                    switch (action3)
+                    {
+                        case "1":
+                            {
+                                int result = bookToModify.CompareTo(bookToCompare.CreationDate);
+                                if (result < 0)
+                                    Console.WriteLine($"{bookToModify.Title} вийшла раніше за {bookToCompare.Title}");
+                                else if (result > 0)
+                                    Console.WriteLine($"{bookToModify.Title} вийшла пізніше за {bookToCompare.Title}");
+                                else
+                                    Console.WriteLine($"{bookToModify.Title} та {bookToCompare.Title} вийшли в один день");
+                                break;
+                            }
+
+                        case "2":
+                            {
+                                int result = bookToModify.CompareTo(bookToCompare.Quantity);
+                                if (result < 0)
+                                    Console.WriteLine($"{bookToModify.Title} має менше примірників, ніж {bookToCompare.Title}");
+                                else if (result > 0)
+                                    Console.WriteLine($"{bookToModify.Title} має більше примірників, ніж {bookToCompare.Title}");
+                                else
+                                    Console.WriteLine($"{bookToModify.Title} та {bookToCompare.Title} мають однакову кількість примірників");
+                                break;
+                            }
+
+                        case "3":
+                            {
+                                int result = bookToModify.CompareTo(bookToCompare.Price);
+                                if (result < 0)
+                                    Console.WriteLine($"{bookToModify.Title} дешевша за {bookToCompare.Title}");
+                                else if (result > 0)
+                                    Console.WriteLine($"{bookToModify.Title} дорожча за {bookToCompare.Title}");
+                                else
+                                    Console.WriteLine($"{bookToModify.Title} та {bookToCompare.Title} мають однакову ціну");
+                                break;
+                            }
+
+                        default:
+                            Console.WriteLine("Неправильна опція.");
+                            break;
+                    }
 
                     break;
                 default:
@@ -186,7 +253,7 @@ while (true)
 }
 
 
-Book CreateBookFromConsole()
+Book CreateBookFromConsole(Boolean full=true)
 {
     var book = new Book();
 
@@ -218,83 +285,86 @@ Book CreateBookFromConsole()
         }
     }
 
-    while (true)
+    if (full)
     {
-        try
+        while (true)
         {
-            Console.Write("Введіть дату створення (yyyy-mm-dd): ");
-            string input = Console.ReadLine();
-            if (!DateOnly.TryParse(input, out DateOnly date))
+            try
             {
-                Console.WriteLine("Невірний формат дати.");
-                continue;
+                Console.Write("Введіть дату створення (yyyy-mm-dd): ");
+                string input = Console.ReadLine();
+                if (!DateOnly.TryParse(input, out DateOnly date))
+                {
+                    Console.WriteLine("Невірний формат дати.");
+                    continue;
+                }
+                book.CreationDate = date;
+                break;
             }
-            book.CreationDate = date;
-            break;
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
         }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Помилка: {ex.Message}");
-        }
-    }
 
-    while (true)
-    {
-        try
+        while (true)
         {
-            Console.Write("Введіть кількість сторінок: ");
-            string input = Console.ReadLine();
-            if (!int.TryParse(input, out int pages))
+            try
             {
-                Console.WriteLine("Невірне число.");
-                continue;
+                Console.Write("Введіть кількість сторінок: ");
+                string input = Console.ReadLine();
+                if (!int.TryParse(input, out int pages))
+                {
+                    Console.WriteLine("Невірне число.");
+                    continue;
+                }
+                book.CountOfPages = pages;
+                break;
             }
-            book.CountOfPages = pages;
-            break;
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
         }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Помилка: {ex.Message}");
-        }
-    }
 
-    while (true)
-    {
-        try
+        while (true)
         {
-            Console.Write("Введіть ціну: ");
-            string input = Console.ReadLine();
-            if (!decimal.TryParse(input, out decimal price))
+            try
             {
-                Console.WriteLine("Невірна ціна.");
-                continue;
+                Console.Write("Введіть ціну: ");
+                string input = Console.ReadLine();
+                if (!decimal.TryParse(input, out decimal price))
+                {
+                    Console.WriteLine("Невірна ціна.");
+                    continue;
+                }
+                book.ChangePrice(price);
+                break;
             }
-            book.ChangePrice(price);
-            break;
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
         }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Помилка: {ex.Message}");
-        }
-    }
 
-    while (true)
-    {
-        try
+        while (true)
         {
-            Console.Write("Введіть кількість: ");
-            string input = Console.ReadLine();
-            if (!int.TryParse(input, out int quantity))
+            try
             {
-                Console.WriteLine("Невірне число.");
-                continue;
+                Console.Write("Введіть кількість: ");
+                string input = Console.ReadLine();
+                if (!int.TryParse(input, out int quantity))
+                {
+                    Console.WriteLine("Невірне число.");
+                    continue;
+                }
+                book.ChangeQuantity(quantity);
+                break;
             }
-            book.ChangeQuantity(quantity);
-            break;
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Помилка: {ex.Message}");
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Помилка: {ex.Message}");
+            }
         }
     }
 

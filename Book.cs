@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
@@ -97,6 +92,50 @@ namespace ConsoleApp1
         }
         public decimal FullCost => quantity * price;
 
+        public Book()
+        {
+            Title = "Без назви";
+            Author = "Невідомий Автор";
+            CreationDate = DateOnly.FromDateTime(DateTime.Today);
+            Price = 10;
+            Quantity = 1;
+            Genre = BookGenre.History;
+            CountOfPages = 100;
+            Description = "Default book description.";
+        }
+
+        public Book(string title, string author, BookGenre genre)
+        {
+            Title = title;
+            Author = author;
+            Genre = genre;
+            CreationDate = DateOnly.FromDateTime(DateTime.Today);
+            Price = 15;
+            Quantity = 1;
+            CountOfPages = 200;
+        }
+
+        public Book(string title, string author, BookGenre genre, decimal price, int quantity, int countOfPages, DateOnly date)
+            : this(title, author, genre)
+        {
+            Price = price;
+            Quantity = quantity;
+            CountOfPages = countOfPages;
+            CreationDate = date;
+        }
+
+        public Book(Book other)
+        {
+            Title = other.Title;
+            Author = other.Author;
+            Genre = other.Genre;
+            Price = other.Price;
+            Quantity = other.Quantity;
+            CountOfPages = other.CountOfPages;
+            CreationDate = other.CreationDate;
+            Description = other.Description;
+        }
+
         public decimal ChangePrice(decimal newPrice)
         {
             Price = newPrice;
@@ -122,10 +161,17 @@ namespace ConsoleApp1
             return Quantity;
         }
 
-        public int CompareTo(Book? other)
+        public int CompareTo(DateOnly date)
         {
-            if (other == null) return 1;
-            return this.creationDate.CompareTo(other.creationDate);
+            return this.creationDate.CompareTo(date);
+        }
+        public int CompareTo(int givenQuantity)
+        {
+            return this.Quantity.CompareTo(givenQuantity);
+        }
+        public int CompareTo(decimal otherPrice)
+        {
+            return this.Price.CompareTo(otherPrice);
         }
 
         public override string ToString()
