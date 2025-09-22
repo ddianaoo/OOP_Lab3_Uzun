@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ConsoleApp1.Book">
+    <Position X="4.75" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>SAABAEAAQQAiAFQEkAIAAIECAAABAACAAQAAgAAAAAA=</HashCode>
+      <FileName>Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="ConsoleApp1.BookGenre">
+    <Position X="1.5" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABAAAAAAAAAAAAAIAAAAAAAEAAoAACRAAAAEA=</HashCode>
+      <FileName>BookGenre.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
